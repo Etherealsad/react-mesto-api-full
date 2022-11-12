@@ -1,0 +1,18 @@
+.profile__name {
+    padding-left: 30px;
+    display: grid;
+    justify-items: start;
+    align-items: center;
+    grid-template-columns: repeat(2, min-content);
+    grid-template-rows: repeat(2, min-content);
+    gap: 16px 10px;
+  }
+  
+  @media screen and (max-width: 768px) {
+    .profile__name {
+      padding: 0;
+      margin-top: 26px;
+      justify-items: center;
+      gap: 14px 10px;
+    }
+  }

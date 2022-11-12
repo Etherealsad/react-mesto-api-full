@@ -1,0 +1,17 @@
+.header__mail {
+    display: flex;
+    padding: 0;
+    margin: 0 24px 0 0;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 22px;
+    transition: .3s linear;
+  }
+  
+  @media screen and (max-width: 880px) {
+    .header__mail {
+      font-size: 14px;
+      line-height: 17px;
+    }
+  }

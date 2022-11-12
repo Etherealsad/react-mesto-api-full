@@ -1,0 +1,14 @@
+.register__title {
+    color: #FFFFFF;
+    margin: 60px 0 0 0;
+    text-align: center;
+    transition: .3s linear;
+  }
+  
+  @media screen and (max-width: 550px) {
+    .register__title {
+      font-size: 20px;
+      line-height: 24px;
+    }
+  }
+  

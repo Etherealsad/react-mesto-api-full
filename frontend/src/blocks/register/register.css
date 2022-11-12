@@ -1,0 +1,9 @@
+.register {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    width: 100%;
+    max-width: 358px;
+    min-width: 320px;
+  }

@@ -1,0 +1,12 @@
+.avatar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    cursor: pointer;
+    background-image: url();
+    background-position: center;
+    background-size: cover;
+}

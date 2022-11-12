@@ -1,0 +1,20 @@
+.register__input {
+    margin: 30px 0 0 0;
+    padding: 0;
+    border: none;
+    border-bottom: 2px solid #CCCCCC;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 17px;
+    color: #CCCCCC;
+    height: 27px;
+    outline: none;
+    background-color: inherit;
+    width: 100%;
+    transition: .3s linear;
+  }
+  
+  .register__input:first-of-type {
+    margin-top: 50px;
+  } 

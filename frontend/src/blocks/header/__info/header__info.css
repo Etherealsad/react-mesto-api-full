@@ -1,0 +1,14 @@
+.header__info {
+    display: flex;
+    justify-content: start;
+    align-items: flex-start;
+    flex-direction: row;
+    transition: .3s linear;
+  }
+  
+  @media screen and (max-width: 880px) {
+    .header__info {
+      margin: 6px 27px 0 0;
+    }
+  }
+  

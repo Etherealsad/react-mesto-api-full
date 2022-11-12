@@ -1,0 +1,16 @@
+.root {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 0 auto;
+    min-width: 320px;
+    min-height: 100vh;
+    font-family: "Inter", "Arial", sans-serif;
+    color: white;
+    background: #000;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  

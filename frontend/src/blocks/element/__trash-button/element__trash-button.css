@@ -1,0 +1,21 @@
+.element__trash-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+    height: 19.3px;
+    width: 18px;
+    background-image: url(../../../images/Grouptrash.svg);
+    border: none;
+    object-fit: fill;
+    outline: none;
+    transition: .3s linear;
+    background-color: rgba(0,0,0,0);
+  }
+
+  .element__trash-button:hover {
+    opacity: 0.6;
+  }
+  

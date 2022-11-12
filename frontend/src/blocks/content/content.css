@@ -1,0 +1,10 @@
+.content {
+    display: flex;
+    flex-direction: column;
+    max-width: 880px;
+    width: 100%;
+    box-sizing: border-box;
+    align-items: center;
+    justify-content: flex-start;
+    min-width: 320px;
+}

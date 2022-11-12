@@ -1,0 +1,13 @@
+.popup__result-img {
+    margin: 24px 0 32px 0;
+    height: 120px;
+    /* width: 120px; */
+    transition: .3s linear;
+    text-align: center;
+  }
+  
+  @media screen and (max-width: 460px) {
+    .popup__result-img {
+      margin: 25px 0 40px 0;
+    }
+  }

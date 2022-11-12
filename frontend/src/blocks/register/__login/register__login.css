@@ -1,0 +1,18 @@
+.register__login {
+    margin: 15px 0 80px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 17px;
+    transition: .3s linear;
+  }
+  
+  @media screen and (max-width: 418px) {
+    .register__login {
+      margin: 20px 0 80px 0;
+    }
+  }

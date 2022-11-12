@@ -1,0 +1,12 @@
+.avatar__edit-button-img {
+    padding: 47px;
+    display: flex;
+    width: 26px;
+    height: 26px;
+    opacity: 0;
+    transition: .3s linear;
+}
+
+.avatar__edit-button-img:hover {
+    opacity: 1;
+}
