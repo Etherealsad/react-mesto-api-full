@@ -8,6 +8,7 @@ const { handleError } = require('./utils/handleError');
 const auth = require('./middlewares/auth');
 const { login, createUser } = require('./controllers/users');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
+require('dotenv').config();
 
 const allowedCors = [
   'http://localhost:3000',
