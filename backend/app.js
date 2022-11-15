@@ -1,4 +1,5 @@
 const express = require('express');
+require('dotenv').config();
 const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
 const { errors, celebrate, Joi } = require('celebrate');
@@ -8,7 +9,6 @@ const { handleError } = require('./utils/handleError');
 const auth = require('./middlewares/auth');
 const { login, createUser } = require('./controllers/users');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
-require('dotenv').config();
 
 const allowedCors = [
   'http://localhost:3000',
