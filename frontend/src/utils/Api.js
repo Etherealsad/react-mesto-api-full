@@ -78,8 +78,5 @@ class Api {
 
 export default new Api({
     baseUrl: 'https://ethereal.students.nomoredomains.icu',
-    headers: {
-        authorization: 'e4024608-cf2f-4054-b99f-7c6eb94e767a',
-        'Content-Type': 'application/json'
-    }
+
 })
