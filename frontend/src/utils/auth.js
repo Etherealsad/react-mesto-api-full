@@ -1,4 +1,4 @@
-export const BASE_URL = 'https://ethereal.students.nomoredomains.icu'
+export const BASE_URL = 'https://api.ethereal.students.nomoredomains.icu'
 
 const handleResponse = res => res.ok ? res.json() : Promise.reject(`Ошибка ${res.status}`)
 
