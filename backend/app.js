@@ -12,8 +12,8 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const allowedCors = [
   'http://localhost:3000',
-  'http://api.ethereal.students.nomoredomains.icu',
-  'https://api.ethereal.students.nomoredomains.icu',
+  'http://ethereal.students.nomoredomains.icu',
+  'https://ethereal.students.nomoredomains.icu',
 ];
 
 const { PORT = 3000 } = process.env;
