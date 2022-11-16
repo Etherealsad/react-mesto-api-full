@@ -14,6 +14,7 @@ class Api {
     getUserInfo() {
         return fetch(`${this._baseUrl}/users/me`, {
             method: 'GET',
+            credentials: 'include',
             headers: this._headers
         })
         .then(this._checkResponse)
@@ -22,6 +23,7 @@ class Api {
     getInitCards() {
         return fetch(`${this._baseUrl}/cards`, {
             method: 'GET', 
+            credentials: 'include',
             headers: this._headers
         })
         .then(this._checkResponse)
@@ -30,6 +32,7 @@ class Api {
     editProfile(userData) {
         return fetch(`${this._baseUrl}/users/me`, {
           method: 'PATCH',
+          credentials: 'include',
           headers: this._headers,
           body: JSON.stringify(userData)
         })
@@ -39,6 +42,7 @@ class Api {
     editAvatar(userAvatar) {
         return fetch(`${this._baseUrl}/users/me/avatar`, {
           method: 'PATCH',
+          credentials: 'include',
           headers: this._headers,
           body: JSON.stringify(userAvatar)
         })
@@ -48,6 +52,7 @@ class Api {
       addCard(cardData) {
         return fetch(`${this._baseUrl}/cards`, {
           method: 'POST',
+          credentials: 'include',
           headers: this._headers,
           body: JSON.stringify(cardData)
         })
@@ -57,22 +62,19 @@ class Api {
     removeCard(cardID) {
         return fetch(`${this._baseUrl}/cards/${cardID}`, {
             method: 'DELETE',
+            credentials: 'include',
             headers: this._headers
         })
         .then(this._checkResponse);
     }
 
-    changeLikeCardStatus(cardId, isLiked) {
-        const putLike = {
-          headers: this._headers,
-          method:'PUT',
-        }
-        const delLike = {
-          headers: this._headers,
-          method:'DELETE',
-        }
-        return fetch(`${this._baseUrl}/cards/likes/${cardId}`, isLiked ? delLike : putLike)
-          .then(this._checkResponse)
+    changeLikeCardStatus(cardId, like) {
+      return fetch(`${this._url}cards/${cardId}/likes`, {
+        method: like ? 'PUT' : 'DELETE',
+        credentials: 'include',
+        headers: this._headers,
+      })
+        .then(this._checkResponse)
       }
 }
 

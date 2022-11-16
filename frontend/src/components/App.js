@@ -41,18 +41,16 @@ function App() {
     tokenCheck()
   })
 
-  const tokenCheck = () => {
-    const token = localStorage.getItem('token')
-    if (token) {
-      Auth.getToken(token).then(res => {
-        if (res.email) {
-          setUserEmail(res.email)
-          setLoggedIn(true)
-          history.push('/')
-        }
-      })
-      .catch(err => console.log(err))
-    }
+  function tokenCheck() {
+    Auth.getToken()
+    .then(res => {
+      if(res.data._id) {
+        setUserEmail(res.data.email);
+        setLoggedIn(true);
+        history.push('/');
+      }
+    })
+    .catch(err => console.log(err));
   }
 
   const handleRegister = (email, password) => {
