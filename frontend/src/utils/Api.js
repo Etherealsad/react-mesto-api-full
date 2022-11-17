@@ -68,18 +68,24 @@ class Api {
         .then(this._checkResponse);
     }
 
-    changeLikeCardStatus(cardId, like) {
-      return fetch(`${this._url}cards/${cardId}/likes`, {
-        method: like ? 'PUT' : 'DELETE',
-        credentials: 'include',
-        headers: this._headers,
-      })
-        .then(this._checkResponse)
+    changeLikeCardStatus(cardId, isLiked) {
+        const putLike = {
+          headers: this._headers,
+          method:'PUT',
+          credentials: 'include'
+        }
+        const delLike = {
+          headers: this._headers,
+          method:'DELETE',
+          credentials: 'include'
+        }
+        return fetch(`${this._baseUrl}/cards/likes/${cardId}`, isLiked ? delLike : putLike)
+          .then(this._checkResponse)
       }
 }
 
 export default new Api({
-    baseUrl: 'https://api.ethereal.students.nomoredomains.icu',
+    baseUrl: 'http://localhost:3000',
     headers: {
       'Content-Type': 'application/json'
     }

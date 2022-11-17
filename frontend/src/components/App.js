@@ -12,7 +12,7 @@ import ProtectedRoute from "./ProtectedRoute.js";
 import yepImage from "../images/yepImage.svg";
 import nopeImage from "../images/nopeImage.svg";
 import * as Auth from "../utils/auth";
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
 import Api from "../utils/Api";
 import {CurrentUserContext} from "../contexts/CurrentUserContext.js";
 import{ Switch, Route, useHistory, Redirect } from "react-router-dom";
@@ -37,10 +37,7 @@ function App() {
   const [infoText, setInfoText] = useState(null)
   const history = useHistory()
 
-  useEffect(() => {
-    tokenCheck()
-  })
-
+ useEffect(() => {
   function tokenCheck() {
     Auth.getToken()
     .then(res => {
@@ -52,6 +49,8 @@ function App() {
     })
     .catch(err => console.log(err));
   }
+  tokenCheck();
+  }, [history])
 
   const handleRegister = (email, password) => {
     setWaiting('Регистрация...')
@@ -109,7 +108,7 @@ function App() {
         setCards(cardsData)
       })
       .catch(err => console.log(err))
-  })
+  }, [])
 
   //Обработчики открытия попапов
   function handleEditAvatarClick() {

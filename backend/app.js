@@ -12,6 +12,9 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const allowedCors = [
   'http://localhost:3000',
+  'http://localhost:5555',
+  'https://localhost:3000',
+  'https://localhost:5555',
   'http://ethereal.students.nomoredomains.icu',
   'https://ethereal.students.nomoredomains.icu',
 ];
@@ -30,6 +33,7 @@ app.use((req, res, next) => {
 
   if (allowedCors.includes(origin)) {
     res.header('Access-Control-Allow-Origin', origin);
+    res.header('Access-Control-Allow-Credentials', true);
   }
 
   if (method === 'OPTIONS') {
@@ -45,7 +49,7 @@ app.use(bodyParser.json());
 
 // подключаемся к серверу mongo
 mongoose.connect('mongodb://localhost:27017/mestodb', {
-  // useNewUrlParser: true,
+  // seNewUrlParser: true,
 });
 
 app.use(requestLogger); // подключаем логгер запросов
