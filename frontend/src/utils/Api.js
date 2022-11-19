@@ -100,7 +100,7 @@ class Api {
 }
 
 export default new Api({
-    baseUrl: 'http://localhost:3000',
+    baseUrl: 'https://api.ethereal.students.nomoredomains.icu',
     headers: {
       'Content-Type': 'application/json'
     }
