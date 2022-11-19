@@ -1,14 +1,18 @@
 const express = require('express');
-require('dotenv').config();
-const cookieParser = require('cookie-parser');
+
+const app = express();
+const { PORT = 3000 } = process.env;
 const mongoose = require('mongoose');
-const { errors, celebrate, Joi } = require('celebrate');
-const bodyParser = require('body-parser');
-const NotFoundError = require('./errors/not-found-errors');
-const { handleError } = require('./utils/handleError');
-const auth = require('./middlewares/auth');
+const { celebrate, Joi, errors } = require('celebrate');
+const helmet = require('helmet');
+
 const { login, createUser } = require('./controllers/users');
+const auth = require('./middlewares/auth');
+const errorHandler = require('./middlewares/error');
+const regExp = require('./regexp/regexp');
+const NotFoundError = require('./errors/not-found-errors');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
+require('dotenv').config();
 
 const allowedCors = [
   'http://localhost:3000',
@@ -19,11 +23,16 @@ const allowedCors = [
   'https://ethereal.students.nomoredomains.icu',
 ];
 
-const { PORT = 3000 } = process.env;
+app.use(helmet());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-const app = express();
-
-app.use(cookieParser());
+mongoose.connect('mongodb://localhost:27017/mestodb', {
+  // useUnifiedTopology: true,
+  // useNewUrlParser: true,
+  // useCreateIndex: true,
+  // useFindAndModify: false,
+});
 
 app.use((req, res, next) => {
   const { origin } = req.headers;
@@ -45,46 +54,37 @@ app.use((req, res, next) => {
   return next();
 });
 
-app.use(bodyParser.json());
-
-// подключаемся к серверу mongo
-mongoose.connect('mongodb://localhost:27017/mestodb', {
-  // seNewUrlParser: true,
-});
-
-app.use(requestLogger); // подключаем логгер запросов
-
-app.post('/signin', celebrate({
-  body: Joi.object().keys({
-    email: Joi.string().required().email(),
-    password: Joi.string().required(),
-  }),
-}), login);
+app.use(requestLogger);
 
 app.post('/signup', celebrate({
   body: Joi.object().keys({
-    email: Joi.string().required().email(),
-    password: Joi.string().required(),
     name: Joi.string().min(2).max(30),
     about: Joi.string().min(2).max(30),
-    avatar: Joi.string().pattern(/https?:\/\/(w{3}.)?(\S)*\.\w{2,3}((\/\w+)+(\/\S+)+)?/),
+    avatar: Joi.string().pattern(regExp),
+    email: Joi.string().email().required(),
+    password: Joi.string().required().min(8).max(35),
   }),
 }), createUser);
 
+app.post('/signin', celebrate({
+  body: Joi.object().keys({
+    email: Joi.string().email().required(),
+    password: Joi.string().required().min(8),
+  }),
+}), login);
+
 app.use(auth);
 
-app.use('/', require('./routes/cards'));
 app.use('/', require('./routes/users'));
+app.use('/', require('./routes/cards'));
 
-app.use('*', (req, res, next) => {
-  next(new NotFoundError('Requested path not found'));
-});
+app.use('*', (req, res, next) => next(new NotFoundError('Ресурс не найден.')));
 
-app.use(errorLogger); // подключаем логгер ошибок
+app.use(errorLogger);
 
 app.use(errors());
 
-app.use(handleError);
+app.use(errorHandler);
 
 app.listen(PORT, () => {
   // eslint-disable-next-line no-console

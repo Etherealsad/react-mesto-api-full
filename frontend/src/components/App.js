@@ -22,12 +22,11 @@ function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false)
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false)
   const [isInfoPopupOpen, setIsInfoPopupOpen] = useState(false)
-  const [isRegisterSuccessfully, setIsRegisterSuccessfully] = useState(true);
   const [currentUser, setCurrentUser] = useState({})
-  const [selectedCard, setSelectedCard] = useState({ 
+  const [selectedCard, setSelectedCard] = useState({
     link: '',
     name: '',
-    isOpen: false
+    isOpened: false
   })
   const [cards, setCards] = useState([])
   const [waiting, setWaiting] = useState(null)
@@ -37,26 +36,28 @@ function App() {
   const [infoText, setInfoText] = useState(null)
   const history = useHistory()
 
- useEffect(() => {
-  function tokenCheck() {
-    Auth.getToken()
-    .then(res => {
-      if(res.data._id) {
-        setUserEmail(res.data.email);
-        setLoggedIn(true);
-        history.push('/');
+  useEffect(() => {
+    const tokenCheck = () => {
+      const token = localStorage.getItem('token')
+      if (token) {
+        Auth.getToken(token).then(res => {
+          if (res.email) {
+            setUserEmail(res.email)
+            setLoggedIn(true)
+            history.push('/')
+          }
+        })
+        .catch(err => console.log(err))
       }
-    })
-    .catch(err => console.log(err));
-  }
-  tokenCheck();
-  }, [history])
+    }
+    tokenCheck();
+    }, [history])
 
   const handleRegister = (email, password) => {
     setWaiting('Регистрация...')
     Auth.register(email, password)
     .then(res => {
-      if (res.data.email) {
+      if (res.email) {
         setInfoText('Вы успешно зарегистрировались!')
         setInfoPic(yepImage)
         handleInfoPopup()
@@ -68,7 +69,7 @@ function App() {
     setInfoText('Что-то пошло не так! Попробуйте ещё раз.')
     setInfoPic(nopeImage)
     handleInfoPopup()})
-    .finally(() => {setWaiting(null)})  
+    .finally(() => {setWaiting(null)})
   }
 
   const handleLogin = (email, password) => {
@@ -76,48 +77,48 @@ function App() {
     Auth.login(email, password)
       .then(res => {
         if (res.token) {
-          localStorage.setItem('jwt', res.token)
+          localStorage.setItem('token', res.token)
           setUserEmail(email)
           setLoggedIn(true)
           history.push('/')
         }
       })
-      .catch(err => {console.log(err)
-      setIsRegisterSuccessfully(false)
-      setIsInfoPopupOpen(true)
-      })
+      .catch(err => console.log(err))
       .finally(() => {setWaiting(null)})
   }
 
   const onSignOut = () => {
-    localStorage.removeItem('jwt')
+    localStorage.removeItem('token')
     setLoggedIn(false)
     setUserEmail('')
   }
 
   useEffect(() => {
-    Api.getUserInfo().then((userData) => {
-      setCurrentUser(userData)
-    })
-      .catch(err => console.log(err))
-  }, [])
+    if (loggedIn === true) {
+      Api.getUserInformation()
+      .then(userData => {
+        setCurrentUser(userData)
+      })
+      .catch(err => console.log(err))}
+  }, [loggedIn])
 
   useEffect(() => {
-    Api.getInitCards()
-      .then((cardsData) => {
-        setCards(cardsData)
+    if (loggedIn === true) {
+      Api.getInitialCards()
+      .then(cardsData => {
+          setCards(cardsData)
       })
-      .catch(err => console.log(err))
-  }, [])
+      .catch(err => console.log(err))}
+  }, [loggedIn])
 
   //Обработчики открытия попапов
-  function handleEditAvatarClick() {
+  const handleEditAvatarClick = () => {
     setIsEditAvatarPopupOpen(!isEditAvatarPopupOpen)
   }
-  function handleEditProfileClick() {
+  const handleEditProfileClick = () => {
     setIsEditProfilePopupOpen(!isEditProfilePopupOpen)
   }
-  function handleAddPlaceClick() {
+  const handleAddPlaceClick = () => {
     setIsAddPlacePopupOpen(!isAddPlacePopupOpen)
   }
   const handleInfoPopup = () => {
@@ -129,11 +130,11 @@ function App() {
     setWaiting('Сохранение...')
     Api.editProfile(userData)
       .then((data) => {
-        setCurrentUser(data)
-        closeAllPopups()
-      })
+      setCurrentUser(data)
+      closeAllPopups()
+    })
       .catch(err => console.log(err))
-      .finally(() => { setWaiting(null) })
+      .finally(() => {setWaiting(null)})
   }
 
   //Обработчик информации об аватаре
@@ -141,20 +142,20 @@ function App() {
     setWaiting('Сохранение...')
     Api.editAvatar(userAvatar)
       .then((data) => {
-        setCurrentUser(data)
-        closeAllPopups()
-      })
+      setCurrentUser(data)
+      closeAllPopups()
+    })
       .catch(err => console.log(err))
-      .finally(() => { setWaiting(null) })
+      .finally(() => {setWaiting(null)})
   }
 
   //Обработчик лайков
   const handleCardLike = (card) => {
-    const isLiked = card.likes.some(i => i._id === currentUser._id)
+    const isLiked = card.likes.some(i => i === currentUser._id)
     Api.changeLikeCardStatus(card._id, isLiked).then((newCard) => {
-      setCards((state) => state.map((c) => c._id === card._id ? newCard : c))
+        setCards((state) => state.map((c) => c._id === card._id ? newCard : c))
     })
-      .catch(err => console.log(err))
+    .catch(err => console.log(err))
   }
 
   //Обработчик удаления карточки
@@ -162,7 +163,7 @@ function App() {
     Api.removeCard(card._id).then(() => {
       setCards((state) => state.filter((c) => c._id !== card._id))
     })
-      .catch(err => console.log(err))
+    .catch(err => console.log(err))
   }
 
   //Обработчик добавления карточки
@@ -173,14 +174,14 @@ function App() {
       closeAllPopups()
     })
       .catch(err => console.log(err))
-      .finally(() => { setWaiting(null) })
+      .finally(() => {setWaiting(null)})
   }
 
   //Обработчик клика по карточке
-  const handleCardClick = ({ link, name, isOpened }) => {
+  const handleCardClick = ({link, name, isOpened}) => {
     setSelectedCard({
-      link,
-      name,
+      link: link,
+      name: name,
       isOpened: !isOpened,
     })
   }
@@ -191,12 +192,16 @@ function App() {
     setIsAddPlacePopupOpen(false)
     setIsEditAvatarPopupOpen(false)
     setIsInfoPopupOpen(false)
-    setSelectedCard({ isOpened: false })
+    setSelectedCard({
+      link: '',
+      name: '',
+      isOpened: false,
+    })
   }
 
   //Закрытие попапа по клику вне формы
   const closePopupByClickOutside = (evt) => {
-    if (evt.target.classList.contains('popup_open')) {
+    if (evt.target.classList.contains('popup_open')){
       closeAllPopups()
     }
   }
@@ -230,7 +235,7 @@ function App() {
             <Redirect to="/" />
           </Route>
         </Switch>
-        
+
         <EditProfilePopup
           isOpen={isEditProfilePopupOpen}
           onClose={closeAllPopups}
@@ -258,7 +263,6 @@ function App() {
           closePopupByClickOutside={closePopupByClickOutside} />
 
         <InfoTooltip
-          isSuccess={isRegisterSuccessfully}
           onClose={closeAllPopups}
           isOpen={isInfoPopupOpen}
           closePopupByClickOutside={closePopupByClickOutside}
@@ -270,4 +274,4 @@ function App() {
   )
 }
 
-export default App;
+export default App
